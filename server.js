@@ -8,14 +8,10 @@ var express = require('express'),
  io = require('socket.io')(server),
  ent = require('ent'),
 
-session = require("express-session")({
-   secret: "my-secret",
-   resave: true,
-   saveUninitialized: true
-}),
+session = require("express-session"),
+FileStore = require('session-file-store')(session),
 sharedsession = require("express-socket.io-session");
- 
- 
+
  
 app.use(express.static('./'))
 .use(session)
@@ -26,9 +22,14 @@ app.use(express.static('./'))
    res.redirect('/');         
 });
  
-io.use(sharedsession(session, {
+io.use(sharedsession(session({
+    secret: "my-secret",
+    resave: true,
+    saveUninitialized: true,
+    store: new FileStore()
+})), {
     autoSave:true
-})); 
+}); 
 
 io.on('connection', function(socket){
     
