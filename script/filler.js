@@ -60,7 +60,7 @@ function addMessage(data, action){
         var task = $("#todolist li").eq(data.task).html();
         var result = task.split("</a>");
         //var result = task.replace(/<a [^>]+>[^<]*<\/a>/, '');
-        $('#message li').append(data.pseudo +' a '+ action +' one task: "'+  result[1] +'"');
+        $('#message li').append(data.pseudo +' has '+ action +' one task: "'+  result[1] +'"');
         //$('#message').append(data.pseudo +' a '+action+' la tâche: '+  result);
     }
 }
