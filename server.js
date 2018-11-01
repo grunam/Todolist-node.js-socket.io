@@ -2,19 +2,68 @@
 var todolist = []; 
 var connectedUsers = [];
 
+
+var MongoClient = require('mongodb').MongoClient;
+var uri = "mongodb+srv://tiabnamik:lI20obpPKFbFSWyy@cluster0-bj2hr.mongodb.net/todolist?retryWrites=true";
+MongoClient.connect(uri,  { useNewUrlParser: true }, function(err, client) {
+    if(err) {
+        console.log('Error occurred while connecting to MongoDB Atlas...\n',err);
+   }
+   console.log('Connected...');
+    var collection = client.db("todolist").collection("tasks");
+   // perform actions on the collection object
+
+});
+
+
+
 var express = require('express'),
  app = express(),  
  server = require('http').createServer(app),
  io = require('socket.io')(server),
  ent = require('ent'),
-
-session = require("express-session"),
-FileStore = require('session-file-store')(session),
-sharedsession = require("express-socket.io-session");
-
+ session = require("express-session"),
+ MongoDBStore = require('connect-mongodb-session')(session),
+ sharedsession = require("express-socket.io-session");
  
+var store = new MongoDBStore(
+  {
+    uri: 'mongodb+srv://tiabnamik:lI20obpPKFbFSWyy@cluster0-bj2hr.mongodb.net/todolist?retryWrites=false',
+    databaseName: 'todolist',
+    collection: 'sessions'
+  },
+    function(error) {
+       // console.log(error);  
+  });
+ 
+store.on('connected', function() {
+  store.client; // The underlying MongoClient object from the MongoDB driver
+  //console.log('okiokioki');
+});
+ 
+// Catch errors
+store.on('error', function(error) {
+  console.log(error);
+  
+}); 
+ 
+var usedSession =  session({
+  secret: 'This is a secret',
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24 * 7 // 1 week
+  },
+  store: store,
+  // Boilerplate options, see:
+  // * https://www.npmjs.com/package/express-session#resave
+  // * https://www.npmjs.com/package/express-session#saveuninitialized
+  resave: true,
+  saveUninitialized: true
+});
+
+
+
 app.use(express.static('./'))
-.use(session)
+.use(usedSession)
 .get('/', function(req, res){
      res.sendFile(__dirname + '/index.html');
  })
@@ -22,14 +71,25 @@ app.use(express.static('./'))
    res.redirect('/');         
 });
  
-io.use(sharedsession(session({
-    secret: "my-secret",
-    resave: true,
-    saveUninitialized: true,
-    store: new FileStore()
-})), {
+ 
+io.use(sharedsession(usedSession, {
     autoSave:true
-}); 
+})); 
+ 
+ 
+/* 
+io.use(sharedsession(session({
+   secret: "my-secret",
+   cookie: {
+    maxAge: 1000 * 60 * 60 * 24 * 7 // 1 week
+   },
+   store: store,
+   resave: true,
+   saveUninitialized: true
+}), {
+    autoSave:true
+})); 
+ */
 
 io.on('connection', function(socket){
     
@@ -42,7 +102,6 @@ io.on('connection', function(socket){
         socket.broadcast.emit('messageLog', {pseudo: socket.handshake.session.userdata, message: '<u>logged in !</u>'});
         connectedUsers.push(pseudo);
         io.sockets.emit('connectedUsersList', connectedUsers);
-        
     });
     
     
