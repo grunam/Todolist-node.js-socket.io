@@ -1,9 +1,17 @@
 
-var socket = io.connect('http://localhost:9999');
-var nickname  = prompt('Quel est votre pseudo ?');
-while(nickname==='' || nickname === null){
+//var url = 'https://todolist-socket-io.herokuapp.com/' || 'http://localhost:5000';
+//var url = 'http://localhost:5000';
+
+var nickname  = prompt('What is your nickname ?');
+if (nickname==null){
+    document.location.href='./error.html';
+}
+while(nickname===''){
     nickname  = prompt('Quel est votre pseudo ?'); 
 }
+
+var socket = io();
+
 socket.emit('login', {pseudo: nickname});
 document.title = nickname + ' - ' + document.title; 
   

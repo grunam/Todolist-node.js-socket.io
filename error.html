@@ -8,8 +8,6 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> 
-        <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-        <script src="socket.io/socket.io.js"></script> 
         <style>
             /* Set height of the grid so .sidenav can be 100% (adjust if needed) */
             .row.content {height: 1500px}
@@ -46,35 +44,10 @@
           <div class="row content">
             <div class="col-sm-3 sidenav">
                 <br>
-                <div class="well">
-                    <h4>Todolist broadcast status</h4>
-                    <ul id="message" class="nav nav-pills nav-stacked">
-                        <li class="text-success"></li>
-                    </ul><br>
-                </div>    
-                <div class="well">
-                    <h4>Users</h4>
-                    <ul id="usersList" class="nav nav-pills nav-stacked"></ul><br>
-                </div>  
-                <div class="well">
-                    <h4>Todolist</h4>
-                    <form action="/" method="post" id="formulaire_todolist" class="form-horizontal"> 
-                        <div class="form-group">
-                            <label class="control-label col-md-5" for="newtodo">What we do ?</label>
-                            <div class="col-md-7">
-                                <input type="text" class="form-control" name="newtodo" id="newtodo" autofocus placeholder="new task...">
-                            </div>    
-                        </div>
-                        <div class="form-group">        
-                            <div class="col-md-offset-5 col-md-7">
-                                <button type="submit" class="btn btn-default">Submit</button>
-                            </div>
-                        </div>
-                    </form>
-                </div> 
+                 
             </div>
             <div class="col-sm-9">
-              <h4>Our todolist...</h4>
+              <h4>You are not connected...</h4>
               <ul id="todolist" class="list-group"></ul>              
             </div>     
           </div>
@@ -82,6 +55,6 @@
         <footer class="container-fluid">
           <p class="pull-right">Grunam</p>
         </footer>
-        <script src="script/filler.js"></script> 
+        
     </body>
 </html>

@@ -15,7 +15,7 @@ MongoClient.connect(uri,  { useNewUrlParser: true }, function(err, client) {
 
 });
 
-
+console.log('GlogpGlop');
 
 var express = require('express'),
  app = express(),  
@@ -31,14 +31,10 @@ var store = new MongoDBStore(
     uri: 'mongodb+srv://tiabnamik:lI20obpPKFbFSWyy@cluster0-bj2hr.mongodb.net/todolist?retryWrites=false',
     databaseName: 'todolist',
     collection: 'sessions'
-  },
-    function(error) {
-       // console.log(error);  
   });
  
 store.on('connected', function() {
   store.client; // The underlying MongoClient object from the MongoDB driver
-  //console.log('okiokioki');
 });
  
 // Catch errors
@@ -48,19 +44,14 @@ store.on('error', function(error) {
 }); 
  
 var usedSession =  session({
-  secret: 'This is a secret',
+  secret: 'my-secret',
   cookie: {
     maxAge: 1000 * 60 * 60 * 24 * 7 // 1 week
   },
   store: store,
-  // Boilerplate options, see:
-  // * https://www.npmjs.com/package/express-session#resave
-  // * https://www.npmjs.com/package/express-session#saveuninitialized
   resave: true,
   saveUninitialized: true
 });
-
-
 
 app.use(express.static('./'))
 .use(usedSession)
@@ -71,26 +62,10 @@ app.use(express.static('./'))
    res.redirect('/');         
 });
  
- 
 io.use(sharedsession(usedSession, {
     autoSave:true
 })); 
  
- 
-/* 
-io.use(sharedsession(session({
-   secret: "my-secret",
-   cookie: {
-    maxAge: 1000 * 60 * 60 * 24 * 7 // 1 week
-   },
-   store: store,
-   resave: true,
-   saveUninitialized: true
-}), {
-    autoSave:true
-})); 
- */
-
 io.on('connection', function(socket){
     
     socket.emit('loadTodolist', todolist);
@@ -103,8 +78,7 @@ io.on('connection', function(socket){
         connectedUsers.push(pseudo);
         io.sockets.emit('connectedUsersList', connectedUsers);
     });
-    
-    
+   
      socket.on('add', function(newtodo){
         newtodo = ent.encode(newtodo);
         todolist.push(newtodo);
@@ -128,6 +102,10 @@ io.on('connection', function(socket){
  
 }); 
 
- server.listen(9999);
 
 
+
+var PORT = process.env.PORT || 5000;
+server.listen(PORT, () => {
+    console.log(`Our app is running on port ${ PORT }`);
+});

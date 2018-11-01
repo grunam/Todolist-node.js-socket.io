@@ -1,13 +1,10 @@
 {
     "name": "todolist-socket.io",
     "version": "1.0.0",
-    "keywords": [
-        "util",
-        "functional",
-        "server",
-        "client",
-        "browser"
-    ],
+    "engines": {
+        "node": "8.11.3",
+        "npm": "5.6.0"
+    },
     "author": "Tiab-namik",
     "contributors": [],
     "dependencies": {
