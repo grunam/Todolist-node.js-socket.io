@@ -9,7 +9,7 @@ MongoClient.connect(uri,  { useNewUrlParser: true }, function(err, client) {
     if(err) {
         console.log('Error occurred while connecting to MongoDB Atlas...\n',err);
    }
-   console.log('Connected...');
+   console.log('Connected to MongoDB Atlas database...');
     var collection = client.db("todolist").collection("tasks");
    // perform actions on the collection object
 
