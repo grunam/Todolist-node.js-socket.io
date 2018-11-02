@@ -1,13 +1,10 @@
 
-//var url = 'https://todolist-socket-io.herokuapp.com/' || 'http://localhost:5000';
-//var url = 'http://localhost:5000';
-
 var nickname  = prompt('What is your nickname ?');
 if (nickname==null){
     document.location.href='./error.html';
 }
 while(nickname===''){
-    nickname  = prompt('Quel est votre pseudo ?'); 
+    nickname  = prompt('What is your nickname ?'); 
 }
 
 var socket = io();
