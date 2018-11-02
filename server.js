@@ -71,7 +71,7 @@ io.on('connection', function(socket){
      socket.on("login", function(data) {
         pseudo = ent.encode(data.pseudo);
         socket.handshake.session.userdata = pseudo;
-        socket.handshake.session.save();
+        //socket.handshake.session.save();
         socket.broadcast.emit('messageLog', {pseudo: socket.handshake.session.userdata, message: '<u>logged in !</u>'});
         connectedUsers.push(pseudo);
         io.sockets.emit('connectedUsersList', connectedUsers);
@@ -94,7 +94,7 @@ io.on('connection', function(socket){
             connectedUsers.splice(connectedUsers.indexOf(socket.handshake.session.userdata), 1);
             socket.broadcast.emit('connectedUsersList', connectedUsers);
             delete socket.handshake.session.userdata;
-            socket.handshake.session.save();
+            //socket.handshake.session.save();
         }
     });  
  
