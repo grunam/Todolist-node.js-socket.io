@@ -15,8 +15,6 @@ MongoClient.connect(uri,  { useNewUrlParser: true }, function(err, client) {
 
 });
 
-console.log('GlogpGlop');
-
 var express = require('express'),
  app = express(),  
  server = require('http').createServer(app),
@@ -101,9 +99,6 @@ io.on('connection', function(socket){
     });  
  
 }); 
-
-
-
 
 var PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
