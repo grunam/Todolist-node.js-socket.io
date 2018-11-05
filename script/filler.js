@@ -9,12 +9,12 @@ while(nickname===''){
 
 var socket = io();
 
-socket.emit('login', {pseudo: nickname});
+socket.emit('login', {user: nickname});
 document.title = nickname + ' - ' + document.title; 
   
 socket.on('add', function(data){
     addMessage(data, 'added');
-    addNewtodo(data.task);
+    addNewtodo(data);
 });
 
 socket.on('remove', function(data){
@@ -28,6 +28,8 @@ socket.on('messageLog', function(data){
 
 socket.on('loadTodolist', function(todolist){
      $('#todolist').empty();
+     
+      //for (var i = 0, len = a.length; i < len; i++){
      todolist.forEach(function(item, index) {
         addNewtodo(item);
      });           
@@ -42,17 +44,17 @@ socket.on('connectedUsersList', function(connectedUsers){
 });
 
 
-$("#todolist").on("click", "a", function() {
+$("#todolist").on("click", "button", function() {
     var id = $(this).closest('li').index();
     socket.emit('remove', id);
-    $(this).closest('li').remove();    
+    //$(this).closest('li').remove();    
     return false;
 }); 
 
  $('#formulaire_todolist').submit(function(){
    var newtodo = $('#newtodo').val();
    socket.emit('add', newtodo);
-   addNewtodo(newtodo);
+   //addNewtodo({newtodo});
    $('#newtodo').val('').focus();
    return false;
 });
@@ -60,23 +62,26 @@ $("#todolist").on("click", "a", function() {
 function addMessage(data, action){
     $('#message li').empty();
     if(isNaN(data.task)){
-        $('#message li').append(data.pseudo +' has '+ action +' one task: "'+ data.task + '"');
+        $('#message li').append(data.user +' has '+ action +' one task: "'+ data.name + '"');
     }else{
-        var task = $("#todolist li").eq(data.task).html();
-        var result = task.split("</a>");
+        var task = $("#todolist li h3").eq(data.task).html();
+        //var result = task.split("</a>");
         //var result = task.replace(/<a [^>]+>[^<]*<\/a>/, '');
-        $('#message li').append(data.pseudo +' has '+ action +' one task: "'+  result[1] +'"');
+        $('#message li').append(data.user +' has '+ action +' one task: "'+  task +'"');
         //$('#message').append(data.pseudo +' a '+action+' la tâche: '+  result);
     }
 }
 
 function addMessageLog(data){
     $('#message li').empty();
-    $('#message li').append(data.pseudo +' has '+ data.message);
+    $('#message li').append(data.user +' has '+ data.message);
 }
 
 function addNewtodo(newtodo){
-    $('#todolist').append('<li class="list-group-item"><a href="#_">✘</a>'+ newtodo +'</li>');
+    var str = '<li class="list-group-item" id="'+ newtodo.id +'"><h3>'+ newtodo.name +' </h3>';
+    str += '<h5><span class="glyphicon glyphicon-time"></span> Post by '+ newtodo.user +', '+ newtodo.date +'.</h5>'
+    str+='<br><button type="button" class="btn btn-danger">delete</button></li>';
+    $('#todolist').append(str);
 }
 
 function addUser(user){
