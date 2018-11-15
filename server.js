@@ -77,8 +77,8 @@ var usedSession =  session({
     maxAge: 1000 * 60 * 60 * 24 * 7 // 1 week
   },
   store: store,
-  resave: true,
-  saveUninitialized: true
+  resave: false,
+  saveUninitialized: false
 });
 
 app.use(express.static('./'))
@@ -91,7 +91,7 @@ app.use(express.static('./'))
 });
  
 io.use(sharedsession(usedSession, {
-    autoSave:true
+    autoSave:false
 })); 
  
 io.on('connection', function(socket){
@@ -163,7 +163,7 @@ io.on('connection', function(socket){
  
 }); 
 
-var PORT = process.env.PORT || 5000;
+var PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
     console.log(`Our app is running on port ${ PORT }`);
 });

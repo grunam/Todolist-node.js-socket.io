@@ -53,9 +53,12 @@ $("#todolist").on("click", "button", function() {
 
  $('#formulaire_todolist').submit(function(){
    var newtodo = $('#newtodo').val();
-   socket.emit('add', newtodo);
-   //addNewtodo({newtodo});
-   $('#newtodo').val('').focus();
+   newtodo = newtodo.trim();
+   if(newtodo.length !== 0){
+       socket.emit('add', newtodo);
+       //addNewtodo({newtodo});
+       $('#newtodo').val('').focus();
+   }
    return false;
 });
 
@@ -65,6 +68,7 @@ function addMessage(data, action){
         $('#message li').append(data.user +' has '+ action +' one task: "'+ data.name + '"');
     }else{
         var task = $("#todolist li h3").eq(data.task).html();
+        task = task.trim();
         //var result = task.split("</a>");
         //var result = task.replace(/<a [^>]+>[^<]*<\/a>/, '');
         $('#message li').append(data.user +' has '+ action +' one task: "'+  task +'"');
